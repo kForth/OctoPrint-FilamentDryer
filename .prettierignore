@@ -1,0 +1,13 @@
+octoprint_filamentdryer/static/js/lib
+octoprint_filamentdryer/static/vendor
+*.md
+*.css
+**/package.json
+**/package-lock.json
+**/*.min.js
+docs
+build
+dist
+venv
+venv2
+venv3

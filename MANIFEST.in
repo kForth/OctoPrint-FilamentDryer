@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_filamentdryer/templates *
+recursive-include octoprint_filamentdryer/translations *
+recursive-include octoprint_filamentdryer/static *

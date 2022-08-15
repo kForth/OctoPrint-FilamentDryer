@@ -1,0 +1,75 @@
+.drying_presets .scroll-wrapper {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 246px;
+  padding-right: 2px;
+}
+
+.drying_presets .entry {
+  padding: 5px;
+  line-height: 20px;
+  position: relative;
+}
+
+.drying_presets .entry:not(:nth-last-child(1)) {
+  border-bottom: 1px solid #ddd;
+}
+
+.drying_presets .entry:hover {
+  background-color: #f5f5f5;
+}
+
+.drying_presets .entry .title {
+  text-overflow: ellipsis;
+  word-break: break-all;
+  margin-right: 30px;
+}
+
+.drying_presets .entry .internal,
+.drying_presets .entry .uploaded,
+.drying_presets .entry .size,
+.drying_presets .entry .additionalInfo {
+  font-size: 85%;
+  color: #999;
+}
+
+.drying_presets .entry .uploaded *[title] {
+  cursor: help;
+}
+
+.drying_presets .entry .internal {
+  word-break: break-all;
+}
+
+.drying_presets .entry .action-buttons {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.drying_presets .entry .additionalInfo {
+  padding-bottom: 22px;
+}
+
+@keyframes highlightframes {
+  0% {
+    background: yellow;
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+.drying_presets .entry.highlight {
+  animation: highlightframes 2s;
+}
+
+.drying_presets .back .back-path {
+  white-space: nowrap;
+}
+
+.drying_presets .back .back-path span {
+  word-wrap: break-word;
+  white-space: pre-line;
+}

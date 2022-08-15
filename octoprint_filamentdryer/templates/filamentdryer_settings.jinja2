@@ -1,0 +1,80 @@
+<form class="form-horizontal" onsubmit="return false;">
+    <legend>{{ _('General Options') }}</legend>
+    <fieldset>
+        <div class="control-group" data-bind="css: {error: !(useHeatedBed() || useHeatedChamber()) }">
+            <label class="control-label">{{ _('Heat Sources') }}</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: useHeatedBed"> {{ _('Use Heated Bed') }}
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: useHeatedChamber"> {{ _('Use Heated Chamber') }}
+                </label>
+                <span class="help-block" data-bind="visible: !(useHeatedBed() || useHeatedChamber())">
+                    {{ _('You must enable either the heated bed or heated chamber.') }}
+                </span>
+            </div>
+        </div>
+    </fieldset>
+
+    <legend>{{ _('Presets') }}</legend>
+    <fieldset>
+        <div class="row-fluid">
+            <div class="span1"></div>
+            <div class="span5"><h4>{{ _('Name') }}</h4></div>
+            <div class="span2"><h4>{{ _('Time') }}</h4></div>
+            <div class="span2"><h4>{{ _('Temp') }}</h4></div>
+        </div>
+        <div data-bind="foreach: presets">
+            <div class="row-fluid control-group" style="margin-bottom: 5px" data-bind="css: {error: !$root.uniquePreset($data)}">
+                <div class="span1 text-right" style="padding: 4px 2px;">
+                    <span data-bind="visible: !$root.uniquePreset($data)" title="{{ _('Duplicate Preset') }}"><i class="fas fa-exclamation-triangle"></i></span>
+                </div>
+                <div class="span5">
+                    <input type="text" class="span12" data-bind="value: $data.name, disabled: !$root.enableEdit">
+                </div>
+                <div class="span2 input-append">
+                    <input type="number" class="input-mini" min="0" step="0.1" data-bind="value: $data.time, disabled: !$root.enableEdit">
+                    <span class="add-on" title="{{ _('Hours') }}">{{ _('h') }}</span>
+                </div>
+                <div class="span2 input-append">
+                    <input type="number" class="input-mini" min="0" step="5" data-bind="value: $data.temp, disabled: !$root.enableEdit">
+                    <span class="add-on" title="{{ _('Degrees Celsius') }}">&#8451;</span>
+                </div>
+                <div class="span1">
+                    <a title="Remove" class="btn btn-danger span12" data-bind="click: $root.removePreset, disabled: !$root.enableRemove"><i class="far fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="offset10 span1">
+                <a title="Add Type" class="btn btn-primary span12" data-bind="click: addPreset, disabled: !enableAdd"><i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+    </fieldset>
+
+    <legend>{{ _('File Options') }}</legend>
+    <fieldset>
+        <div class="control-group" hidden>
+            <label class="control-label">{{ _('Origin') }}</label>
+            <div class="controls">
+                <input type="text" data-bind="value: presetOrigin">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('Directory') }}</label>
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: presetDirectory">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('Filename Template') }}</label>
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: filenameTemplate">
+                <span class="help-block">
+                    {{ _('The following placeholders are available:<ul><li>name (str): Preset Name</li><li>time (float): Drying Time in hours</li><li>temp (int): Drying Temp, in degrees Celsius</li></ul>')}}
+                </span>
+            </div>
+        </div>
+    </fieldset>
+</form>

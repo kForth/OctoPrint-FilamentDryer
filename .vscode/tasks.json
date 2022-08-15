@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build less",
+      "type": "shell",
+      "command": "lessc --clean-css octoprint_filamentdryer\\static\\less\\filamentdryer.less octoprint_filamentdryer\\static\\css\\filamentdryer.css",
+      "problemMatcher": ["$lessc"]
+    }
+  ]
+}

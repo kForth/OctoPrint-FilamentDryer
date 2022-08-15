@@ -1,0 +1,78 @@
+exclude: ^(octoprint_filamentdryer/filament_dryer_script_generator/|octoprint_filamentdryer/static/js/lib|octoprint_filamentdryer/static/vendor|tests/static/js/lib|tests/util/_files|scripts/|translations/|.*\.css|.*\.svg)
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: fix-encoding-pragma
+        args: ["--remove"]
+        exclude: "setup.py|versioneer.py"
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.31.0
+    hooks:
+      - id: pyupgrade
+        args: ["--py37-plus"]
+        exclude: "setup.py|versioneer.py"
+  - repo: https://github.com/OctoPrint/codemods
+    rev: "0.6.3"
+    hooks:
+      - id: codemod_batch
+        args:
+          [
+            "--check",
+            "not_in",
+            "--check",
+            "detect_past_builtins_imports",
+            "--ignore",
+            "octoprint_filamentdryer/filament_dryer_script_generator",
+            "--ignore",
+            "setup.py",
+            "--ignore",
+            "versioneer.py"
+          ]
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+      - id: isort
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        additional_dependencies:
+          - click==8.0.4
+        args:
+          [
+            "--line-length",
+            "90",
+            "--include",
+            "((octoprint_filamentdryer|tests|.github).*\\.pyi?$)|(setup\\.py)"
+          ]
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-bugbear==22.3.20
+        exclude: ^(setup.py|docs/)
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.5.1
+    hooks:
+      - id: prettier
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.8.0
+    hooks:
+      - id: eslint
+        additional_dependencies:
+          - eslint@7.19.0
+          - eslint-plugin-cypress@2.11.2
+        files: \.js$
+        exclude: ^(octoprint_filamentdryer/filament_dryer_script_generator/|tests/static/js/lib|tests/util/_files|docs/|scripts/|translations/)
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+    hooks:
+      - id: codespell

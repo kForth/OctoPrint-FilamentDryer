@@ -1,0 +1,10 @@
+<div class="refresh-trigger accordion-heading-button btn-group" data-bind="visible: access.permissions.FILES_LIST">
+    <a href="#" title="{{ _("Refresh List") }}" aria-label="{{ _("Refresh List") }}" data-bind="click: refreshPresets">
+        <i class="fas fa-sync"></i>
+    </a>
+</div>
+<div class="settings-trigger accordion-heading-button btn-group" data-bind="visible: access.permissions.SETTINGS">
+    <a href="#" title="{{ _("Edit Presets") }}" aria-label="{{ _("Edit Presets") }}" data-bind="click: showPluginSettings">
+        <i class="fas fa-edit"></i>
+    </a>
+</div>

@@ -62,9 +62,13 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">{{ _('Directory') }}</label>
+            <label class="control-label">{{ _('Display Name Template') }}</label>
             <div class="controls">
-                <input class="input-block-level" type="text" data-bind="value: presetDirectory">
+                <input class="input-block-level" type="text" data-bind="value: displayTemplate">
+                <span class="help-block">
+                    <b>Preview:&nbsp;</b><i data-bind="text: displayTemplatePreview"></i><br>
+                    {{ _('The following placeholders are available:<ul><li>name (str): Preset Name</li><li>time (float): Drying Time in hours</li><li>temp (int): Drying Temp, in degrees Celsius</li></ul>')}}
+                </span>
             </div>
         </div>
         <div class="control-group">
@@ -72,8 +76,15 @@
             <div class="controls">
                 <input class="input-block-level" type="text" data-bind="value: filenameTemplate">
                 <span class="help-block">
+                    <b>Preview:&nbsp;</b><i data-bind="text: filenameTemplatePreview"></i><br>
                     {{ _('The following placeholders are available:<ul><li>name (str): Preset Name</li><li>time (float): Drying Time in hours</li><li>temp (int): Drying Temp, in degrees Celsius</li></ul>')}}
                 </span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('Directory') }}</label>
+            <div class="controls">
+                <input class="input-block-level" type="text" data-bind="value: presetDirectory">
             </div>
         </div>
     </fieldset>

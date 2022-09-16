@@ -1,7 +1,11 @@
 import octoprint.plugin
 from octoprint.filemanager.destinations import FileDestinations
 
-from octoprint_filamentdryer.preset import DEFAULT_FILENAME_TEMPLATE
+from octoprint_filamentdryer.preset import (
+    DEFAULT_DISPLAY_TEMPLATE,
+    DEFAULT_FILENAME_TEMPLATE,
+    FILE_EXTENSION,
+)
 from octoprint_filamentdryer.preset_manager import sync_preset_files
 
 
@@ -19,6 +23,7 @@ class FilamentDryerPlugin(
         self._presetOrigin = defaults["presetOrigin"]
         self._presetDirectory = defaults["presetDirectory"]
         self._filenameTemplate = defaults["filenameTemplate"]
+        self._displayTemplate = defaults["displayTemplate"]
         self._useHeatedBed = defaults["useHeatedBed"]
         self._useHeatedChamber = defaults["useHeatedChamber"]
 
@@ -26,6 +31,9 @@ class FilamentDryerPlugin(
 
     def _sync_presets(self):
         sync_preset_files(self._logger, self._file_manager)
+        self._plugin_manager.send_plugin_message(
+            self._identifier, {"action": "refreshPresets"}
+        )
 
     ##~~ StartupPlugin mixin
 
@@ -57,6 +65,7 @@ class FilamentDryerPlugin(
         self._presetOrigin = self._settings.get(["presetOrigin"])
         self._presetDirectory = self._settings.get(["presetDirectory"])
         self._filenameTemplate = self._settings.get(["filenameTemplate"])
+        self._displayTemplate = self._settings.get(["displayTemplate"])
         self._useHeatedBed = self._settings.get(["useHeatedBed"])
         self._useHeatedChamber = self._settings.get(["useHeatedChamber"])
 
@@ -71,6 +80,7 @@ class FilamentDryerPlugin(
             "presetOrigin": FileDestinations.LOCAL,
             "presetDirectory": __plugin_name__,
             "filenameTemplate": DEFAULT_FILENAME_TEMPLATE,
+            "displayTemplate": DEFAULT_DISPLAY_TEMPLATE,
             "useHeatedBed": True,
             "useHeatedChamber": True,
         }
@@ -110,6 +120,7 @@ class FilamentDryerPlugin(
             presetOrigin=self._presetOrigin,
             presetDirectory=self._presetDirectory,
             filenameTemplate=self._filenameTemplate,
+            displayTemplate=self._displayTemplate,
             useHeatedBed=self._useHeatedBed,
             useHeatedChamber=self._useHeatedChamber,
         )
@@ -117,7 +128,7 @@ class FilamentDryerPlugin(
     ##~~ ExtenstionTree hook
 
     def get_extension_tree(self, *args, **kwargs):
-        return dict(machinecode=dict(gcode=["filamentdryer"]))
+        return dict(machinecode=dict(gcode=[FILE_EXTENSION]))
 
     ##~~ Softwareupdate hook
 

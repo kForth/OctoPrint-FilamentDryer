@@ -6,6 +6,8 @@
  */
 $(function () {
     function FilamentDryerViewModel(parameters) {
+        const PLUGIN_ID = "filamentdryer";
+        const FILE_EXTENSION = PLUGIN_ID;
         var self = this;
 
         // assign the injected parameters, e.g.:
@@ -20,15 +22,39 @@ $(function () {
         self.presetOrigin = ko.observable(undefined);
         self.presetDirectory = ko.observable(undefined);
         self.filenameTemplate = ko.observable(undefined);
+        self.displayTemplate = ko.observable(undefined);
         self.useHeatedBed = ko.observable(undefined);
         self.useHeatedChamber = ko.observable(undefined);
+
+        self.filenameTemplatePreview = ko.pureComputed(function () {
+            return self.presetFilename(
+                self.presets()[0] || {name: "Preset", time: 4, temp: 50}
+            );
+        });
+        self.displayTemplatePreview = ko.pureComputed(function () {
+            return self.presetDisplayName(
+                self.presets()[0] || {name: "Preset", time: 4, temp: 50}
+            );
+        });
 
         self.presetLocation = ko.pureComputed(function () {
             return self.presetOrigin() + "/" + self.presetDirectory();
         });
 
         self.presetFilename = function (preset) {
-            return _.sprintf(self.filenameTemplate(), {
+            return (
+                _.sprintf(self.filenameTemplate(), {
+                    name: preset.name(),
+                    time: preset.time(),
+                    temp: preset.temp()
+                }) +
+                "." +
+                FILE_EXTENSION
+            );
+        };
+
+        self.presetDisplayName = function (preset) {
+            return _.sprintf(self.displayTemplate(), {
                 name: preset.name(),
                 time: preset.time(),
                 temp: preset.temp()
@@ -57,6 +83,7 @@ $(function () {
             target.presetOrigin(source.presetOrigin());
             target.presetDirectory(source.presetDirectory());
             target.filenameTemplate(source.filenameTemplate());
+            target.displayTemplate(source.displayTemplate());
             target.useHeatedBed(source.useHeatedBed());
             target.useHeatedChamber(source.useHeatedChamber());
         };
@@ -194,6 +221,16 @@ $(function () {
             ]
                 .join("_")
                 .toLowerCase();
+        };
+
+        self.onDataUpdaterPluginMessage = function (plugin, data) {
+            if (plugin != PLUGIN_ID) {
+                return;
+            }
+
+            if (data.action == "refreshPresets") {
+                self.refreshPresets();
+            }
         };
 
         self.onUserPermissionsChanged =

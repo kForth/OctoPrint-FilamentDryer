@@ -7,7 +7,7 @@ from datetime import datetime
 
 __author__ = """Kestin Goforth"""
 __email__ = "kgoforth1503@gmail.com"
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __copyright__ = "Copyright 2022"
 __license__ = "AGPLv3"
 __scriptname__ = "Filament Dryer Gcode Script Generator"

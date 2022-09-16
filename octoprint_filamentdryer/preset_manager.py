@@ -30,14 +30,15 @@ def write_preset_files(logger: logging.Logger, fileManager: FileManager):
     logger.info("Writing new preset files")
     origin = settings().get(["plugins", "filamentdryer", "presetOrigin"])
     path = settings().get(["plugins", "filamentdryer", "presetDirectory"])
-    template = settings().get(["plugins", "filamentdryer", "filenameTemplate"])
+    filename_template = settings().get(["plugins", "filamentdryer", "filenameTemplate"])
+    display_template = settings().get(["plugins", "filamentdryer", "displayTemplate"])
     presets = settings().get(["plugins", "filamentdryer", "presets"])
     use_bed = settings().get(["plugins", "filamentdryer", "useHeatedBed"])
     use_chamber = settings().get(["plugins", "filamentdryer", "useHeatedChamber"])
 
     for preset in presets:
         try:
-            logger.info("Wiring file for preset: %s", preset)
+            logger.info("Writing preset file for: %s", preset)
             preset = Preset.from_dict(preset)
             with tempfile.SpooledTemporaryFile() as handle:
                 script_generator.create_script(
@@ -49,10 +50,10 @@ def write_preset_files(logger: logging.Logger, fileManager: FileManager):
                 )
                 handle._file.seek(0)
                 fileManager._storage(origin).add_file(
-                    preset.get_filepath(path, template),
-                    StreamWrapper(preset.get_filename(template), handle._file),
+                    preset.get_filepath(path, filename_template),
+                    StreamWrapper(preset.get_filename(filename_template), handle._file),
                     allow_overwrite=True,
-                    display=preset.display,
+                    display=preset.get_display_name(display_template),
                 )
         except Exception as ex:
             logger.exception("Failed to write file for preset: %s", preset, exc_info=ex)

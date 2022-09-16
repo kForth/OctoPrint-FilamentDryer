@@ -2,7 +2,8 @@ import os
 import re
 
 FILE_EXTENSION = "filamentdryer"
-DEFAULT_FILENAME_TEMPLATE = f"%(name)s.{FILE_EXTENSION}"
+DEFAULT_FILENAME_TEMPLATE = "%(name)s"
+DEFAULT_DISPLAY_TEMPLATE = "%(name)s (%(time)0.1fh @ %(temp)d°C)"
 
 
 class Preset:
@@ -19,14 +20,12 @@ class Preset:
         self.time = float(time)
         self.temp = int(temp)
 
-    @property
-    def display(self):
-        return "%s (%0.1fh @ %d°C)" % (self.name, self.time, self.temp)
+    def get_display_name(self, template=DEFAULT_DISPLAY_TEMPLATE):
+        return template % {"name": self.name, "time": self.time, "temp": self.temp}
 
     def get_filename(self, template=DEFAULT_FILENAME_TEMPLATE):
-        return to_snake_case(
-            template % {"name": self.name, "time": self.time, "temp": self.temp}
-        )
+        filename = template % {"name": self.name, "time": self.time, "temp": self.temp}
+        return to_snake_case(".".join((filename, FILE_EXTENSION)))
 
     def get_filepath(self, path, template=DEFAULT_FILENAME_TEMPLATE):
         return os.path.join(path, self.get_filename(template))
